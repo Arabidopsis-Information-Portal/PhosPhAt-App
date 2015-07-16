@@ -80,6 +80,43 @@
           sEmptyTable: 'No phosphorylation data available.'
         }
       });
+    };
+
+    // Creates a table to display hotspot data
+    // Function is called once search button is clicked
+    var showHotspotData = function showHotspotData(response) {
+      // Stores API response
+      var data = response.obj || response;
+      data = data.result;
+
+      // Creates a base table that the data will be stored in
+      $('#hotspots', appContext).html(
+        '<table id="hotspot-table" width="100%" cellspacing="0"' +
+        'class="table table-striped table-bordered table-hover">' +
+        '<thead><tr><th>Start Position</th><th>End Position</th>' +
+        '<th>Hotspot Sequence</th></tr></thead>' +
+        '<tbody id="hotspot-data"></tbody></table>');
+
+      for (var i = 0; i < data.length; i++) {
+        // Saves data in strings to later be added to table
+        var start = '<td>' + data[i].start_position + '</td>';
+        var end = '<td>' + data[i].end_position + '</td>';
+        var sequence = '<td>' + data[i].hotspot_sequence + '</td>';
+
+
+        // Dynamically adds saved data to the table
+        $('#hotspot-data', appContext).append('<tr>' + start +
+        end + sequence + '</tr>');
+      }
+
+      // Converts normal table to DataTable
+      $('#hotspot-table', appContext).DataTable({
+        // Overrides default text to make it more specific to this App
+        oLanguage: {
+          sSearch: 'Narrow results:',
+          sEmptyTable: 'No phosphorylation data available.'
+        }
+      });
 
     };
 
@@ -95,6 +132,8 @@
         transcript_id: $('input[name=transcript_input]').val()
       };
 
+      // TODO: Add error methods
+
       // Calls PhosPhAt API to make experimental search, using saved parameter
       Agave.api.adama.search(
         {namespace: 'phosphat', service: 'phosphorylated_experimental_v0.2',
@@ -107,6 +146,13 @@
         {namespace: 'iliban-dev', service: 'phosphorylated_predicted_v0.1',
          queryParams: params},
         showPredictedData // Calls showPredictedData() after click
+      );
+
+      // Calls PhosPhAt API to make hotspot search, using saved parameter
+      Agave.api.adama.search(
+        {namespace: 'iliban-dev', service: 'phosphorylated_hotspots_v0.1',
+         queryParams: params},
+        showHotspotData // Calls showPredictedData() after click
       );
 
 
