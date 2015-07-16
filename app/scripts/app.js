@@ -7,12 +7,12 @@
     var Agave = window.Agave;
 
     // Once the search button is clicked, retrieve the data
-    $('#searchButton').click(function() {
+    $('#phosphat_searchButton').click(function() {
 
       // Inserts loading text, will be replaced by table
-      $('#experimental', appContext).html('<h2>Loading...</h2>');
-      $('#predicted', appContext).html('<h2>Loading...</h2>');
-      $('#hotspots', appContext).html('<h2>Loading...</h2>');
+      $('#phosphat_experimental', appContext).html('<h2>Loading...</h2>');
+      $('#phosphat_predicted', appContext).html('<h2>Loading...</h2>');
+      $('#phosphat_hotspots', appContext).html('<h2>Loading...</h2>');
 
       // Saves user-input as a parameter
       var params = {
@@ -51,12 +51,12 @@
       data = data.result;
 
       // Creates a base table that the data will be stored in
-      $('#experimental', appContext).html(
-        '<table width="100%" cellspacing="0" id="experimental-table"' +
+      $('#phosphat_experimental', appContext).html(
+        '<table width="100%" cellspacing="0" id="phosphat_experimental-table"' +
         'class="table table-striped table-bordered table-hover">' +
         '<thead><tr><th>Peptide Sequence</th><th>Position</th>' +
         '<th>Modification Type</th><th>Mass</th></tr></thead>' +
-        '<tbody id="experimental-data"></tbody></table>');
+        '<tbody id="phosphat_experimental-data"></tbody></table>');
 
       // Loops through each JSON object in the data
       for (var i = 0; i < data.length; i++) {
@@ -73,12 +73,12 @@
         }
 
         // Dynamically adds saved data to the table
-        $('#experimental-data', appContext).append('<tr>' + peptideSeq +
+        $('#phosphat_experimental-data', appContext).append('<tr>' + peptideSeq +
         peptidePos + modType  + mass + '</tr>');
       }
 
       // Converts normal table to DataTable
-      $('#experimental-table', appContext).DataTable({
+      $('#phosphat_experimental-table', appContext).DataTable({
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
@@ -95,12 +95,12 @@
       data = data.result;
 
       // Creates a base table that the data will be stored in
-      $('#predicted', appContext).html(
-        '<table id="predicted-table" width="100%" cellspacing="0"' +
+      $('#phosphat_predicted', appContext).html(
+        '<table id="phosphat_predicted-table" width="100%" cellspacing="0"' +
         'class="table table-striped table-bordered table-hover">' +
         '<thead><tr><th>Protein Position</th><th>13-mer Sequence</th>' +
         '<th>Prediction Score</th></tr></thead>' +
-        '<tbody id="predicted-data"></tbody></table>');
+        '<tbody id="phosphat_predicted-data"></tbody></table>');
 
       // Loops through each JSON object in the data
       for (var i = 0; i < data.length; i++) {
@@ -112,12 +112,12 @@
         var predictionScore = '<td>' + parseFloat(data[i].prediction_score).toFixed(4) + '</td>';
 
         // Dynamically adds saved data to the table
-        $('#predicted-data', appContext).append('<tr>' + proteinPos +
+        $('#phosphat_predicted-data', appContext).append('<tr>' + proteinPos +
         sequence + predictionScore + '</tr>');
       }
 
       // Converts normal table to DataTable
-      $('#predicted-table', appContext).DataTable({
+      $('#phosphat_predicted-table', appContext).DataTable({
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
@@ -133,12 +133,12 @@
       data = data.result;
 
       // Creates a base table that the data will be stored in
-      $('#hotspots', appContext).html(
-        '<table id="hotspot-table" width="100%" cellspacing="0"' +
+      $('#phosphat_hotspots', appContext).html(
+        '<table id="phosphat_hotspot-table" width="100%" cellspacing="0"' +
         'class="table table-striped table-bordered table-hover">' +
         '<thead><tr><th>Start Position</th><th>End Position</th>' +
         '<th>Hotspot Sequence</th></tr></thead>' +
-        '<tbody id="hotspot-data"></tbody></table>');
+        '<tbody id="phosphat_hotspot-data"></tbody></table>');
 
       // Loops through each JSON object in the data
       for (var i = 0; i < data.length; i++) {
@@ -149,12 +149,12 @@
 
 
         // Dynamically adds saved data to the table
-        $('#hotspot-data', appContext).append('<tr>' + start +
+        $('#phosphat_hotspot-data', appContext).append('<tr>' + start +
         end + sequence + '</tr>');
       }
 
       // Converts normal table to DataTable
-      $('#hotspot-table', appContext).DataTable({
+      $('#phosphat_hotspot-table', appContext).DataTable({
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
