@@ -26,7 +26,12 @@
         var peptideSeq = '<td>' + data[i].peptide_sequence + '</td>';
         var peptidePos = '<td>' + data[i].position_in_peptide + '</td>';
         var modType = '<td>' + data[i].modification_type + '</td>';
-        var mass = '<td>' + data[i].mass + '</td>';
+        // TODO: Have API return null instead of empty quotes
+        if (data[i].mass !== "") {
+          var mass = '<td>' + parseFloat(data[i].mass).toFixed(3) + '</td>';
+        } else {
+          var mass = '<td>' + 'not provided' + '</td>';
+        }
 
         // Dynamically adds saved data to the table
         $('#experimental-data', appContext).append('<tr>' + peptideSeq +
@@ -64,7 +69,7 @@
         var proteinPos = '<td>' + data[i].position_in_protein + '</td>';
         // TODO: Modify API to rename 13mer_sequence to thirteen_mer_sequence
         var sequence = '<td>' + data[i].thirteen_mer_sequence + '</td>';
-        var predictionScore = '<td>' + data[i].prediction_score + '</td>';
+        var predictionScore = '<td>' + parseFloat(data[i].prediction_score).toFixed(4) + '</td>';
 
 
         // Dynamically adds saved data to the table
@@ -124,8 +129,13 @@
     $('#searchButton').click(function() {
 
       // Empties out any tables from old searches
-      $('#experimental-table', appContext).empty();
-      $('#predicted-table', appContext).empty();
+      //$('#experimental-table', appContext).empty();
+      //$('#predicted-table', appContext).empty();
+
+      // Inserts laoding text, will be replaced by table
+      $('#experimental', appContext).html('<h2>Loading...</h2>');
+      $('#predicted', appContext).html('<h2>Loading...</h2>');
+      $('#hotspots', appContext).html('<h2>Loading...</h2>');
 
       // Saves user-input as a parameter
       var params = {
