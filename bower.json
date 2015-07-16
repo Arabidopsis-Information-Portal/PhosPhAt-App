@@ -1,0 +1,7 @@
+{
+  "name": "phosphorylation-app",
+  "private": true,
+  "dependencies": {
+    "DataTables": "~1.10.7"
+  }
+}

@@ -1,0 +1,26 @@
+<div class="science-app" data-app-name="phosphorylation-app">
+  <h2>Phosphorylation Data</h2>
+
+  <form>
+    Transcript ID: <input type="text" name="transcript_input">
+    <button type="button" id="searchButton">Search</button>
+  </form>
+  <br>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#experimental" aria-controls="experimental" role="tab" data-toggle="tab">Experimental</a></li>
+    <li role="presentation"><a href="#predicted" aria-controls="predicted" role="tab" data-toggle="tab">Predicted</a></li>
+    <li role="presentation"><a href="#hotspots" aria-controls="hotspots" role="tab" data-toggle="tab">Hotspots</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="experimental"><div id="experimental-table"></div></div>
+    <div role="tabpanel" class="tab-pane fade" id="predicted">Predicted</div>
+    <div role="tabpanel" class="tab-pane fade" id="hotspots">Hotspots</div>
+  </div>
+
+
+
+</div>
