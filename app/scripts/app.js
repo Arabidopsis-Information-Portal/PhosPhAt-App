@@ -25,21 +25,24 @@
       Agave.api.adama.search(
         {namespace: 'phosphat', service: 'phosphorylated_experimental_v0.2',
          queryParams: params},
-        showExperimentalData // Displays retrieved data in a table
+        showExperimentalData, // Displays retrieved data in a table
+        showErrorMessage // Displays an error if Adama returns an exception
       );
 
       // Calls API to retrieve predicted data, using saved parameter
       Agave.api.adama.search(
-        {namespace: 'iliban-dev', service: 'phosphorylated_predicted_v0.1',
+        {namespace: 'phosphat', service: 'phosphorylated_predicted_v0.2',
          queryParams: params},
-        showPredictedData // Displays retrieved data in a table
+        showPredictedData, // Displays retrieved data in a table
+        showErrorMessage // Displays an error if Adama returns an exception
       );
 
       // Calls API to retrieve hotspot data, using saved parameter
       Agave.api.adama.search(
-        {namespace: 'iliban-dev', service: 'phosphorylated_hotspots_v0.1',
+        {namespace: 'phosphat', service: 'phosphorylated_hotspots_v0.2',
          queryParams: params},
-        showHotspotData // Displays retrieved data in a table
+        showHotspotData, // Displays retrieved data in a table
+        showErrorMessage // Displays an error if Adama returns an exception.
       );
     });
 
@@ -82,7 +85,7 @@
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
-          sEmptyTable: 'No phosphorylation data available.'
+          sEmptyTable: 'No experimental phosphorylation data available for this transcript id.'
         }
       });
 
@@ -121,7 +124,7 @@
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
-          sEmptyTable: 'No phosphorylation data available.'
+          sEmptyTable: 'No predicted phosphorylation data available for this transcript id.'
         }
       });
     };
@@ -158,10 +161,21 @@
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
-          sEmptyTable: 'No phosphorylation data available.'
+          sEmptyTable: 'No hotspot data available for this transcript id.'
         }
       });
-
     };
+
+    var showErrorMessage = function showErrorMessage(response) {
+          $('#phosphat_experimental', appContext).html(
+              '<h3>There was an error retrieving your data from the server. ' +
+              'Verify you entered a valid transcript id.</h3>');
+          $('#phosphat_predicted', appContext).html(
+              '<h3>There was an error retrieving your data from the server. ' +
+              'Verify you entered a valid transcript id.</h3>');
+          $('#phosphat_hotspots', appContext).html(
+              '<h3>There was an error retrieving your data from the server. ' +
+              'Verify you entered a valid transcript id.</h3>');
+    }
   });
 })(window, jQuery);
