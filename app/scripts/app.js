@@ -19,8 +19,6 @@
         transcript_id: $('input[name=transcript_input]').val()
       };
 
-      // TODO: Add error methods
-
       // Calls API to retrieve experimental data, using saved parameter
       Agave.api.adama.search(
         {namespace: 'phosphat', service: 'phosphorylated_experimental_v0.2',
@@ -67,7 +65,6 @@
         var peptideSeq = '<td>' + data[i].peptide_sequence + '</td>';
         var peptidePos = '<td>' + data[i].position_in_peptide + '</td>';
         var modType = '<td>' + data[i].modification_type + '</td>';
-        // TODO: Have API return null instead of empty quotes
         // Checks to see if mass was provided, if so round it.
         if (data[i].mass !== "") {
           var mass = '<td>' + parseFloat(data[i].mass).toFixed(3) + '</td>';
@@ -109,7 +106,6 @@
       for (var i = 0; i < data.length; i++) {
         // Saves data in strings to later be added to table
         var proteinPos = '<td>' + data[i].position_in_protein + '</td>';
-        // TODO: Modify API to rename 13mer_sequence to thirteen_mer_sequence
         var sequence = '<td>' + data[i].thirteen_mer_sequence + '</td>';
         // Rounds number
         var predictionScore = '<td>' + parseFloat(data[i].prediction_score).toFixed(4) + '</td>';
@@ -167,15 +163,19 @@
     };
 
     var showErrorMessage = function showErrorMessage(response) {
+          // Display error on the screen.
           $('#phosphat_experimental', appContext).html(
-              '<h3>There was an error retrieving your data from the server. ' +
-              'Verify you entered a valid transcript id.</h3>');
+              '<h4>There was an error retrieving your data from the server. ' +
+              'See below:</h4><div class="alert alert-danger" role="alert">' +
+               response.obj.message + '</div>');
           $('#phosphat_predicted', appContext).html(
-              '<h3>There was an error retrieving your data from the server. ' +
-              'Verify you entered a valid transcript id.</h3>');
+            '<h4>There was an error retrieving your data from the server. ' +
+            'See below:</h4><div class="alert alert-danger" role="alert">' +
+             response.obj.message + '</div>');
           $('#phosphat_hotspots', appContext).html(
-              '<h3>There was an error retrieving your data from the server. ' +
-              'Verify you entered a valid transcript id.</h3>');
+            '<h4>There was an error retrieving your data from the server. ' +
+            'See below:</h4><div class="alert alert-danger" role="alert">' +
+             response.obj.message + '</div>');
     }
   });
 })(window, jQuery);
