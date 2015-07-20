@@ -2,11 +2,15 @@
   <h2>Phosphorylation Data</h2>
 
   <form>
-    Transcript ID: <input type="text" name="transcript_input">
+    Transcript ID: <input type="text" name="phosphat_transcript-input">
     <button type="button" id="phosphat_searchButton">Search</button>
+    <h6><i>Example value: AT1G06410.1</i></h6>
   </form>
   <br>
-
+  <div id="phosphat_protein-seq-cont">
+  <h5>Protein Sequence:</h5>
+  <div id="phosphat_protein-seq"></div></div>
+  <br>
   <!-- Navigation tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#phosphat_experimental" aria-controls="experimental" role="tab" data-toggle="tab">Experimental</a></li>

@@ -16,7 +16,7 @@
 
       // Saves user-input as a parameter
       var params = {
-        transcript_id: $('input[name=transcript_input]').val()
+        transcript_id: $('input[name=phosphat_transcript-input]').val()
       };
 
       // Calls API to retrieve experimental data, using saved parameter
@@ -50,6 +50,10 @@
       // Stores API response
       var data = response.obj || response;
       data = data.result;
+
+      // Displays protein sequence
+      $('#phosphat_protein-seq', appContext).html(data[0].protein_sequence);
+      $('#phosphat_protein-seq-cont', appContext).toggle();
 
       // Creates a base table that the data will be stored in
       $('#phosphat_experimental', appContext).html(
