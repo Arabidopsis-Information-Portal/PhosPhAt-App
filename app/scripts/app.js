@@ -6,10 +6,12 @@
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
 
+    // Will be used to store initialized DataTables
     var experimentalTable,
         predictedTable,
         hotspotTable;
 
+    // Stores whether various tables have finished loading
     var loadedExp = false,
         loadedPred  = false,
         loadedHot = false;
@@ -71,7 +73,6 @@
         $('#phosphat_protein-seq-cont', appContext).show();
       }
 
-
       // Creates a base table that the data will be stored in
       $('#phosphat_experimental', appContext).html(
         '<table width="100%" cellspacing="0" id="phosphat_experimental-table"' +
@@ -87,7 +88,7 @@
         var peptideSeq = '<td>' + data[i].peptide_sequence + '</td>';
         var peptidePos = '<td>' + data[i].position_in_peptide + '</td>';
         var modType = '<td>' + data[i].modification_type + '</td>';
-        // Checks to see if mass was provided, if so round it.
+        // Checks to see if a mass was provided, if so round it.
         var peptideMass;
         if (data[i].mass !== '') {
           peptideMass = '<td>' + parseFloat(data[i].mass).toFixed(3) + '</td>';
@@ -121,7 +122,7 @@
     var showPredictedData = function showPredictedData(response) {
       // Stores API response
       var data = response.obj || response;
-      data = data.result;
+      data = data.result; // data.result contains an array of objects
 
       // Creates a base table that the data will be stored in
       $('#phosphat_predicted', appContext).html(
@@ -164,7 +165,7 @@
     var showHotspotData = function showHotspotData(response) {
       // Stores API response
       var data = response.obj || response;
-      data = data.result;
+      data = data.result; // data.result contains an array of objects
 
       // Creates a base table that the data will be stored in
       $('#phosphat_hotspots', appContext).html(
@@ -180,7 +181,6 @@
         var start = '<td>' + data[i].start_position + '</td>';
         var end = '<td>' + data[i].end_position + '</td>';
         var sequence = '<td>' + data[i].hotspot_sequence + '</td>';
-
 
         // Dynamically adds saved data to the table
         $('#phosphat_hotspot-data', appContext).append('<tr>' + start +
@@ -204,22 +204,24 @@
 
     };
 
+    // Displays an error message if the API returns an error
     var showErrorMessage = function showErrorMessage(response) {
-          // Display error on the screen.
-          $('#phosphat_experimental', appContext).html(
-              '<h4>There was an error retrieving your data from the server. ' +
-              'See below:</h4><div class="alert alert-danger" role="alert">' +
-               response.obj.message + '</div>');
-          $('#phosphat_predicted', appContext).html(
-            '<h4>There was an error retrieving your data from the server. ' +
-            'See below:</h4><div class="alert alert-danger" role="alert">' +
-             response.obj.message + '</div>');
-          $('#phosphat_hotspots', appContext).html(
-            '<h4>There was an error retrieving your data from the server. ' +
-            'See below:</h4><div class="alert alert-danger" role="alert">' +
-             response.obj.message + '</div>');
+      // Displays the same message on each tab
+      $('#phosphat_experimental', appContext).html(
+          '<h4>There was an error retrieving your data from the server. ' +
+          'See below:</h4><div class="alert alert-danger" role="alert">' +
+           response.obj.message + '</div>');
+      $('#phosphat_predicted', appContext).html(
+        '<h4>There was an error retrieving your data from the server. ' +
+        'See below:</h4><div class="alert alert-danger" role="alert">' +
+         response.obj.message + '</div>');
+      $('#phosphat_hotspots', appContext).html(
+        '<h4>There was an error retrieving your data from the server. ' +
+        'See below:</h4><div class="alert alert-danger" role="alert">' +
+         response.obj.message + '</div>');
     };
 
+    // Sets the active tab to the first tab with data in it
     var setActiveTab = function setActiveTab() {
       if (experimentalTable.data().length > 0) {
         $('a[href=#phosphat_experimental]').tab('show');
@@ -228,6 +230,7 @@
       } else if (hotspotTable.data().length > 0) {
         $('a[href=#phosphat_hotspots]').tab('show');
       } else {
+        // If no tabs have data, set the active tab to experimental
         $('a[href=#phosphat_experimental]').tab('show');
       }
     };
