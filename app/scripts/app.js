@@ -80,6 +80,7 @@
         '<th>Modification Type</th><th>Mass</th></tr></thead>' +
         '<tbody id="phosphat_experimental-data"></tbody></table>');
 
+
       // Loops through each JSON object in the data
       for (var i = 0; i < data.length; i++) {
         // Saves data in strings to later be added to table
@@ -87,15 +88,16 @@
         var peptidePos = '<td>' + data[i].position_in_peptide + '</td>';
         var modType = '<td>' + data[i].modification_type + '</td>';
         // Checks to see if mass was provided, if so round it.
-        if (data[i].mass !== "") {
-          var mass = '<td>' + parseFloat(data[i].mass).toFixed(3) + '</td>';
+        var peptideMass;
+        if (data[i].mass !== '') {
+          peptideMass = '<td>' + parseFloat(data[i].mass).toFixed(3) + '</td>';
         } else {
-          var mass = '<td>' + 'not provided' + '</td>';
+          peptideMass = '<td>' + 'not provided' + '</td>';
         }
 
         // Dynamically adds saved data to the table
         $('#phosphat_experimental-data', appContext).append('<tr>' + peptideSeq +
-        peptidePos + modType  + mass + '</tr>');
+        peptidePos + modType  + peptideMass + '</tr>');
       }
 
       // Converts normal table to DataTable
@@ -216,11 +218,10 @@
             '<h4>There was an error retrieving your data from the server. ' +
             'See below:</h4><div class="alert alert-danger" role="alert">' +
              response.obj.message + '</div>');
-    }
+    };
 
     var setActiveTab = function setActiveTab() {
       if (experimentalTable.data().length > 0) {
-        console.log('Made exp active');
         $('a[href=#phosphat_experimental]').tab('show');
       } else if (predictedTable.data().length > 0) {
         $('a[href=#phosphat_predicted]').tab('show');
@@ -229,7 +230,7 @@
       } else {
         $('a[href=#phosphat_experimental]').tab('show');
       }
-    }
-    
+    };
+
   });
 })(window, jQuery);
