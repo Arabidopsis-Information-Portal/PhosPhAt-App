@@ -6,8 +6,22 @@
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
 
+    var experimentalTable,
+        predictedTable,
+        hotspotTable;
+
+    var loadedExp = false,
+        loadedPred  = false,
+        loadedHot = false;
+
     // Once the search button is clicked, retrieve the data
     $('#phosphat_searchButton').click(function() {
+
+      // Reset variables
+      loadedExp = loadedPred = loadedHot = false;
+
+      // Resets UI elements.
+      $('#phosphat_protein-seq-cont', appContext).hide();
 
       // Inserts loading text, will be replaced by table
       $('#phosphat_experimental', appContext).html('<h2>Loading...</h2>');
@@ -49,11 +63,14 @@
     var showExperimentalData = function showExperimentalData(response) {
       // Stores API response
       var data = response.obj || response;
-      data = data.result;
+      data = data.result; // data.result contains an array of objects
 
       // Displays protein sequence
-      $('#phosphat_protein-seq', appContext).html(data[0].protein_sequence);
-      $('#phosphat_protein-seq-cont', appContext).toggle();
+      if (data.length > 0) {
+        $('#phosphat_protein-seq', appContext).html(data[0].protein_sequence);
+        $('#phosphat_protein-seq-cont', appContext).show();
+      }
+
 
       // Creates a base table that the data will be stored in
       $('#phosphat_experimental', appContext).html(
@@ -82,13 +99,19 @@
       }
 
       // Converts normal table to DataTable
-      $('#phosphat_experimental-table', appContext).DataTable({
+      experimentalTable = $('#phosphat_experimental-table', appContext).DataTable({
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
           sEmptyTable: 'No experimental phosphorylation data available for this transcript id.'
         }
       });
+
+      // If all tables are loaded, sets the active tab.
+      loadedExp = true;
+      if (loadedExp && loadedPred && loadedHot) {
+        setActiveTab();
+      }
 
     };
 
@@ -120,13 +143,19 @@
       }
 
       // Converts normal table to DataTable
-      $('#phosphat_predicted-table', appContext).DataTable({
+        predictedTable = $('#phosphat_predicted-table', appContext).DataTable({
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
           sEmptyTable: 'No predicted phosphorylation data available for this transcript id.'
         }
       });
+
+      /// If all tables are loaded, sets the active tab.
+      loadedPred = true;
+      if (loadedExp && loadedPred && loadedHot) {
+        setActiveTab();
+      }
     };
 
     // Creates a table to display hotspot data
@@ -157,13 +186,20 @@
       }
 
       // Converts normal table to DataTable
-      $('#phosphat_hotspot-table', appContext).DataTable({
+      hotspotTable = $('#phosphat_hotspot-table', appContext).DataTable({
         // Overrides default text to make it more specific to this app
         oLanguage: {
           sSearch: 'Narrow results:',
           sEmptyTable: 'No hotspot data available for this transcript id.'
         }
       });
+
+      // If all tables are loaded, sets the active tab.
+      loadedHot = true;
+      if (loadedExp && loadedPred && loadedHot) {
+        setActiveTab();
+      }
+
     };
 
     var showErrorMessage = function showErrorMessage(response) {
@@ -181,5 +217,19 @@
             'See below:</h4><div class="alert alert-danger" role="alert">' +
              response.obj.message + '</div>');
     }
+
+    var setActiveTab = function setActiveTab() {
+      if (experimentalTable.data().length > 0) {
+        console.log('Made exp active');
+        $('a[href=#phosphat_experimental]').tab('show');
+      } else if (predictedTable.data().length > 0) {
+        $('a[href=#phosphat_predicted]').tab('show');
+      } else if (hotspotTable.data().length > 0) {
+        $('a[href=#phosphat_hotspots]').tab('show');
+      } else {
+        $('a[href=#phosphat_experimental]').tab('show');
+      }
+    }
+    
   });
 })(window, jQuery);
