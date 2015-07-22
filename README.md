@@ -18,14 +18,14 @@
 
 ##### To get started, enter a transcript identifier in the input field labeled "Transcript ID". An example of a valid transcript ID is provided below the search box. Once the search button is clicked the tables in all three tabs will be loaded with data. Next to each tab name is the number of data entries that table contains. You can click on any of the tabs to view that table.
 
-Additonal Features:
+Additional Features:
 
 *   Typing in the upper-right input field labeled "Narrow results:" allows for the data in that table to be searched.
 *   Clicking the table headers allows the table to be sorted in ascending or descending order.
 *   Dragging the table headers allows for the columns to be rearranged.
 *   The number of entries shown at once can be changed with the dropdown in the upper-left.
 
-#### Possible Issues:
+Possible Issues:
 
 *   A valid transcript ID is composed of a locus ID and a number identifying its isomer. For example, AT1G01540.1 and AT1G01540.2 are both valid transcript IDs with the same locus ID (AT1G01540).
 *   If an invalid transcript ID is entered a red error message is displayed below the search box.
