@@ -16,6 +16,7 @@
 
       // Resets UI elements.
       $('#phosphat_protein-seq-cont', appContext).hide();
+      $('#phosphat_error', appContext).empty();
 
       // Inserts loading text, will be replaced by table
       $('#phosphat_experimental', appContext).html('<h2>Loading...</h2>');
@@ -193,19 +194,11 @@
 
     // Displays an error message if the API returns an error
     var showErrorMessage = function showErrorMessage(response) {
-      // Displays the same message on each tab
-      $('#phosphat_experimental', appContext).html(
+      $('#phosphat_error', appContext).html(
           '<h4>There was an error retrieving your data from the server. ' +
           'See below:</h4><div class="alert alert-danger" role="alert">' +
            response.obj.message + '</div>');
-      $('#phosphat_predicted', appContext).html(
-        '<h4>There was an error retrieving your data from the server. ' +
-        'See below:</h4><div class="alert alert-danger" role="alert">' +
-         response.obj.message + '</div>');
-      $('#phosphat_hotspots', appContext).html(
-        '<h4>There was an error retrieving your data from the server. ' +
-        'See below:</h4><div class="alert alert-danger" role="alert">' +
-         response.obj.message + '</div>');
+
     };
 
   });

@@ -2,39 +2,104 @@
   <h2>Phosphorylation Data</h2>
 
   <form>
-    Transcript ID: <input type="text" name="phosphat_transcript-input">
-    <button type="button" id="phosphat_searchButton">Search</button>
-    <h6><i>Example value: AT1G06410.1</i></h6>
+  Transcript ID: <input type="text" name="phosphat_transcript-input">
+  <button type="button" id="phosphat_searchButton">Search</button>
+  <h6><i>Example value: AT1G01540.1</i></h6>
   </form>
-  <br>
+  <div id="phosphat_error"></div>
   <div id="phosphat_protein-seq-cont">
   <h5>Protein Sequence:</h5>
   <div id="phosphat_protein-seq"></div></div>
   <br>
   <!-- Navigation tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" id="phosphat_exp-tab" class="active">
-      <a href="#phosphat_experimental" aria-controls="experimental" role="tab" data-toggle="tab">Experimental<span id="exp_num_rows"></span></a>
-    </li>
+  <li role="presentation" id="phosphat_exp-tab" class="active">
+  <a href="#phosphat_about" aria-controls="about" role="tab" data-toggle="tab">About</a>
+  </li>
 
-    <li role="presentation" id="phosphat_pred-tab">
-      <a href="#phosphat_predicted" aria-controls="predicted" role="tab" data-toggle="tab">Predicted<span id="pred_num_rows"></span></a>
-    </li>
+  <li role="presentation" id="phosphat_exp-tab">
+  <a href="#phosphat_experimental" aria-controls="experimental" role="tab" data-toggle="tab">Experimental<span id="exp_num_rows"></span></a>
+  </li>
 
-    <li role="presentation" id="phosphat_hot-tab">
-      <a href="#phosphat_hotspots" aria-controls="hotspots" role="tab" data-toggle="tab">Hotspots<span id="hot_num_rows"></span></a>
-    </li>
+  <li role="presentation" id="phosphat_pred-tab">
+  <a href="#phosphat_predicted" aria-controls="predicted" role="tab" data-toggle="tab">Predicted<span id="pred_num_rows"></span></a>
+  </li>
+
+  <li role="presentation" id="phosphat_hot-tab">
+  <a href="#phosphat_hotspots" aria-controls="hotspots" role="tab" data-toggle="tab">Hotspots<span id="hot_num_rows"></span></a>
+  </li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
 
-    <!-- Tab panes -->
-    <div role="tabpanel" class="tab-pane fade in active" id="phosphat_experimental"></div>
-    <div role="tabpanel" class="tab-pane fade" id="phosphat_predicted"></div>
-    <div role="tabpanel" class="tab-pane fade" id="phosphat_hotspots"></div>
-  </div>
+    <!-- About tab -->
+    <div role="tabpanel" class="tab-pane fade in active" id="phosphat_about">
+      <a href="http://phosphat.uni-hohenheim.de" target="_blank"><img src="http://i57.tinypic.com/2dh6y4h.png" id="phos_logo" alt="PhosPhAt Logo"></a>
+
+      <a href="http://phosphat.uni-hohenheim.de" target="_blank"><h3>PhosPhAt Website</h3></a>
+      <h4>This app displays tables containing data, obtained from PhosPhAt, regarding protein phosphorylation sites. There is a table in each tab, and upon entering a transcript identifier, all three tables are populated with data. The "Experimental" tab displays phosphorylation sites that were experimentally determined. The "Predicted" tab displays phosphorylation sites that was computationally predicted. Lastly, the "Hotspots" tab displays computationally predicted phosphorylation hotspots. </h4>
+      <blockquote>
+        <p>The Arabidopsis Protein Phosphorylation Site Database (PhosPhAt 4.0) contains information on Arabidopsis phosphorylation sites which were identified by mass spectrometry in large scale experiments by different research groups. Specific information about the peptide properties, their annotated biological function as well as the experimental and analytical context is given. . . . The PhosPhAt service has a built-in plant specific phosphorylation site predictor trained on the experimental dataset for Serine, threonine and tyrosine phosphorylation.</p>
+        <footer>The Arabidopsis Protein Phosphorylation Site Database (PhosPhAt)</footer>
+      </blockquote>
 
 
+      <h4>PhosPhAt asks that the following papers be cited when using their data:</h4>
+      <blockquote>
+        <ul id="paper-credit">
+          <li>
+            <strong>Kinase-Target interactions</strong>:
+            Zulawski M, Braginets R, Schulze WX (2013) PhosPhAt goes kinases – Searchable protein
+            kinase target information in the plant phosphorylation site database PhosPhAt.
+            Nucleic Acids Research 41: (<a href="http://www.ncbi.nlm.nih.gov/pubmed/23172287" target="_blank">PubMed</a>)
+            </li>
+          <li>
+            <strong>Phosphorylation site database and predictor</strong>:
+            Durek P, Schmidt R, Heazlewood JL, Jones A, Maclean D, Nagel A, Kersten B, Schulze
+            WX (2010) PhosPhAt: the Arabidopsis thaliana phosphorylation site database.
+            An update. Nucleic Acids Research 38: D828-D834 (<a href="http://www.ncbi.nlm.nih.gov/pubmed/19880383" target="_blank">PubMed</a>)
+            </li>
+          <li>
+            <strong>Original Phosphorylation site database</strong>:
+            Heazlewood JL, Durek P, Hummel J, Selbig J, Weckwerth W, Walther D, Schulze WX (2008)
+            PhosPhAt: A Database of phosphorylation sites in Arabidopsis thaliana
+            and a plant specific phosphorylation site predictor. Nucleic Acids Research
+            36: D1015-D1021 (<a href="http://www.ncbi.nlm.nih.gov/pubmed/17984086" target="_blank">PubMed</a>)
+          </li>
+        </ul>
+      </blockquote>
+      <h3>Instructions:</h3>
+      <h4>
+        To get started, enter a transcript identifier in the input field labeled "Transcript ID". An example of a valid transcript ID is provided below the search box. Once the search button is clicked the tables in all three tabs will be loaded with data. Next to each tab name is the number of data entries that table contains. You can click on any of the tabs to view that table.
+        <br><br>
+        Additonal Features:</h4>
+        <ul>
+          <li>Typing in the upper-right input field labeled "Narrow results:" allows for the data in that table to be searched.</li>
+          <li>Clicking the table headers allows the table to be sorted in ascending or descending order.</li>
+          <li>Dragging the table headers allows for the columns to be rearranged.</li>
+          <li>The number of entries shown at once can be changed with the dropdown in the upper-left.</li>
+        </ul>
+        <h4>Possible Issues:</h4>
+        <ul>
+          <li>A valid transcript ID is composed of a locus ID  and a number identifying its isomer. For example, AT1G01540.1 and AT1G01540.2 are both valid transcript IDs with the same locus ID (AT1G01540). </li>
+          <li>If an invalid transcript ID is entered a red error message is displayed below the search box.</li>
+          <li>A transcript ID may return data for one, all, or none of the tabs. If a table has zero entries, it means no data was returned.</li>
+        </ul>
 
-</div>
+    </div> <!-- Close #phosphat_about -->
+
+    <!-- Data tables -->
+    <div role="tabpanel" class="tab-pane fade" id="phosphat_experimental">
+      <h2>Please search for a transcript ID.</h2>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="phosphat_predicted">
+      <h2>Please search for a transcript ID.</h2>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="phosphat_hotspots">
+      <h2>Please search for a transcript ID.</h2>
+    </div>
+
+  </div> <!-- Close .tab-content -->
+
+</div> <!-- Close .science-app -->
