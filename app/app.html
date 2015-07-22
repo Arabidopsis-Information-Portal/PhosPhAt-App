@@ -13,13 +13,23 @@
   <br>
   <!-- Navigation tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" id="phosphat_exp-tab"><a href="#phosphat_experimental" aria-controls="experimental" role="tab" data-toggle="tab">Experimental</a></li>
-    <li role="presentation" id="phosphat_pred-tab"><a href="#phosphat_predicted" aria-controls="predicted" role="tab" data-toggle="tab">Predicted</a></li>
-    <li role="presentation" id="phosphat_hot-tab"><a href="#phosphat_hotspots" aria-controls="hotspots" role="tab" data-toggle="tab">Hotspots</a></li>
+    <li role="presentation" id="phosphat_exp-tab" class="active">
+      <a href="#phosphat_experimental" aria-controls="experimental" role="tab" data-toggle="tab">Experimental<span id="exp_num_rows"></span></a>
+    </li>
+
+    <li role="presentation" id="phosphat_pred-tab">
+      <a href="#phosphat_predicted" aria-controls="predicted" role="tab" data-toggle="tab">Predicted<span id="pred_num_rows"></span></a>
+    </li>
+
+    <li role="presentation" id="phosphat_hot-tab">
+      <a href="#phosphat_hotspots" aria-controls="hotspots" role="tab" data-toggle="tab">Hotspots<span id="hot_num_rows"></span></a>
+    </li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
+
+    <!-- Tab panes -->
     <div role="tabpanel" class="tab-pane fade in active" id="phosphat_experimental"></div>
     <div role="tabpanel" class="tab-pane fade" id="phosphat_predicted"></div>
     <div role="tabpanel" class="tab-pane fade" id="phosphat_hotspots"></div>

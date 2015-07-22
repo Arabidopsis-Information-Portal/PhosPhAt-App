@@ -11,16 +11,8 @@
         predictedTable,
         hotspotTable;
 
-    // Stores whether various tables have finished loading
-    var loadedExp = false,
-        loadedPred  = false,
-        loadedHot = false;
-
     // Once the search button is clicked, retrieve the data
     $('#phosphat_searchButton').click(function() {
-
-      // Reset variables
-      loadedExp = loadedPred = loadedHot = false;
 
       // Resets UI elements.
       $('#phosphat_protein-seq-cont', appContext).hide();
@@ -103,18 +95,17 @@
 
       // Converts normal table to DataTable
       experimentalTable = $('#phosphat_experimental-table', appContext).DataTable({
-        // Overrides default text to make it more specific to this app
-        oLanguage: {
+        oLanguage: { // Overrides default text to make it more specific to this app
           sSearch: 'Narrow results:',
           sEmptyTable: 'No experimental phosphorylation data available for this transcript id.'
-        }
+        },
+        dom: 'Rlfrtip', // Allows for user to reorder columns
+        stateSave: true // Saves the state of the table between loads
       });
 
-      // If all tables are loaded, sets the active tab.
-      loadedExp = true;
-      if (loadedExp && loadedPred && loadedHot) {
-        setActiveTab();
-      }
+      // Add the number of rows to the tab name
+    $('#exp_num_rows', appContext).html(' (' + experimentalTable.data().length + ')');
+
 
     };
 
@@ -147,22 +138,21 @@
 
       // Converts normal table to DataTable
         predictedTable = $('#phosphat_predicted-table', appContext).DataTable({
-        // Overrides default text to make it more specific to this app
-        oLanguage: {
+        oLanguage: { // Overrides default text to make it more specific to this app
           sSearch: 'Narrow results:',
           sEmptyTable: 'No predicted phosphorylation data available for this transcript id.'
-        }
+        },
+        dom: 'Rlfrtip', // Allows for user to reorder columns
+        stateSave: true // Saves the state of the table between loads
       });
 
-      /// If all tables are loaded, sets the active tab.
-      loadedPred = true;
-      if (loadedExp && loadedPred && loadedHot) {
-        setActiveTab();
-      }
+      // Add the number of rows to the tab name
+      $('#pred_num_rows', appContext).html(' (' + predictedTable.data().length + ')');
     };
 
     // Creates a table to display hotspot data
     var showHotspotData = function showHotspotData(response) {
+
       // Stores API response
       var data = response.obj || response;
       data = data.result; // data.result contains an array of objects
@@ -178,7 +168,7 @@
       // Loops through each JSON object in the data
       for (var i = 0; i < data.length; i++) {
         // Saves data in strings to later be added to table
-        var start = '<td>' + data[i].start_position + '</td>';
+        var start = '<td>' + data[i]['start_position'] + '</td>';
         var end = '<td>' + data[i].end_position + '</td>';
         var sequence = '<td>' + data[i].hotspot_sequence + '</td>';
 
@@ -189,19 +179,16 @@
 
       // Converts normal table to DataTable
       hotspotTable = $('#phosphat_hotspot-table', appContext).DataTable({
-        // Overrides default text to make it more specific to this app
-        oLanguage: {
+        oLanguage: { // Overrides default text to make it more specific to this app
           sSearch: 'Narrow results:',
           sEmptyTable: 'No hotspot data available for this transcript id.'
-        }
+        },
+        dom: 'Rlfrtip', // Allows for user to reorder columns
+        stateSave: true // Saves the state of the table between loads
       });
 
-      // If all tables are loaded, sets the active tab.
-      loadedHot = true;
-      if (loadedExp && loadedPred && loadedHot) {
-        setActiveTab();
-      }
-
+      // Add the number of rows to the tab name
+      $('#hot_num_rows', appContext).html(' (' + hotspotTable.data().length + ')');
     };
 
     // Displays an error message if the API returns an error
@@ -219,20 +206,6 @@
         '<h4>There was an error retrieving your data from the server. ' +
         'See below:</h4><div class="alert alert-danger" role="alert">' +
          response.obj.message + '</div>');
-    };
-
-    // Sets the active tab to the first tab with data in it
-    var setActiveTab = function setActiveTab() {
-      if (experimentalTable.data().length > 0) {
-        $('a[href=#phosphat_experimental]').tab('show');
-      } else if (predictedTable.data().length > 0) {
-        $('a[href=#phosphat_predicted]').tab('show');
-      } else if (hotspotTable.data().length > 0) {
-        $('a[href=#phosphat_hotspots]').tab('show');
-      } else {
-        // If no tabs have data, set the active tab to experimental
-        $('a[href=#phosphat_experimental]').tab('show');
-      }
     };
 
   });
