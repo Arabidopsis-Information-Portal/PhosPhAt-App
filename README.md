@@ -1,6 +1,6 @@
 [![PhosPhAt Logo](http://i57.tinypic.com/2dh6y4h.png)](http://phosphat.uni-hohenheim.de)
 
-[### PhosPhAt Website](http://phosphat.uni-hohenheim.de)
+###[PhosPhAt Website](http://phosphat.uni-hohenheim.de)
 
 ##### This app displays tables containing data, obtained from PhosPhAt, regarding protein phosphorylation sites. There is a table in each tab, and upon entering a transcript identifier, all three tables are populated with data. The "Experimental" tab displays phosphorylation sites that were experimentally determined. The "Predicted" tab displays phosphorylation sites that was computationally predicted. Lastly, the "Hotspots" tab displays computationally predicted phosphorylation hotspots.
 
