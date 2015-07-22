@@ -168,7 +168,7 @@
       // Loops through each JSON object in the data
       for (var i = 0; i < data.length; i++) {
         // Saves data in strings to later be added to table
-        var start = '<td>' + data[i]['start_position'] + '</td>';
+        var start = '<td>' + data[i].start_position + '</td>';
         var end = '<td>' + data[i].end_position + '</td>';
         var sequence = '<td>' + data[i].hotspot_sequence + '</td>';
 
