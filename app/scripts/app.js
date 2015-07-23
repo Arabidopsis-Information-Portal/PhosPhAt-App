@@ -5,6 +5,7 @@
   // Ensure Agave is ready before running
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
+    var transcriptID;
 
     // Will be used to store initialized DataTables
     var experimentalTable,
@@ -24,8 +25,9 @@
       $('#phosphat_hotspots', appContext).html('<h2>Loading...</h2>');
 
       // Save user-input as a parameter
+      transcriptID = $('input[name=phosphat_transcript-input]').val();
       var params = {
-        transcript_id: $('input[name=phosphat_transcript-input]').val()
+        transcript_id: transcriptID
       };
 
       // Call API to retrieve experimental data, using saved parameter
@@ -87,9 +89,18 @@
       var data = response.obj || response;
       data = data.result; // data.result contains an array of objects
 
-      // Display protein sequence
+      // Display protein sequence in FASTA
       if (data.length > 0) {
-        $('#phosphat_protein-seq', appContext).html(data[0].protein_sequence);
+        var formatted_seq = '';
+        var raw_seq = data[0].protein_sequence;
+        // Add a new line every 70 characters
+        while (raw_seq.length > 0) {
+          formatted_seq += raw_seq.substring(0, 70) + '<br />';
+          raw_seq = raw_seq.substring(70);
+        }
+        $('#phosphat_protein-seq', appContext).html('>' +
+          transcriptID  + '<br />');
+        $('#phosphat_protein-seq', appContext).append(formatted_seq);
         $('#phosphat_protein-seq-cont', appContext).show();
       }
 
