@@ -11,8 +11,8 @@
         predictedTable,
         hotspotTable;
 
-    // Once the search button is clicked, retrieve the data
-    $('#phosphat_searchButton').click(function() {
+    // Once the search for is submitted, retrieve the data
+    $('#phosphat_search').submit(function(event) {
 
       // Resets UI elements.
       $('#phosphat_protein-seq-cont', appContext).hide();
@@ -51,6 +51,9 @@
         showHotspotData, // Displays retrieved data in a table
         showErrorMessage // Displays an error if Adama returns an exception.
       );
+
+      // Prevents page from reloading when form is submitted
+      event.preventDefault();
     });
 
 
