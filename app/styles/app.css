@@ -7,7 +7,7 @@
   border: 1px solid rgb(183, 183, 183);
   font-family: "Courier New", Courier, monospace;
   padding: 5px;
-  height: 8em;
+  max-height: 8em;
   max-width: 44em;
 	overflow-y:scroll;
 
