@@ -1,8 +1,8 @@
-#phosphat_protein-seq-cont {
+[data-app-name="phosphorylation-app"] #proteinInfoBox {
   display: none;
 }
 
-#phosphat_protein-seq {
+[data-app-name="phosphorylation-app"] #proteinSequenceBox {
   background-color: #f9f9f9;
   border: 1px solid rgb(183, 183, 183);
   font-family: "Courier New", Courier, monospace;
@@ -13,19 +13,19 @@
 
 }
 
-#phosphat_about {
+[data-app-name="phosphorylation-app"] #aboutTab {
   padding-top: 3%;
   padding-left: 1%;
 }
 
-#paper-credit {
+[data-app-name="phosphorylation-app"] #paper-credit {
   font-size: .8em;
 }
 
-h4 {
+[data-app-name="phosphorylation-app"] h4 {
   line-height: 130%;
 }
 
-#phos_logo {
+[data-app-name="phosphorylation-app"] #logo {
   border-radius: 0% 25%;
 }
