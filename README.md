@@ -2,7 +2,7 @@
 
 ### [PhosPhAt Website](http://phosphat.uni-hohenheim.de)
 
-##### This app displays tables containing data, obtained from PhosPhAt, regarding protein phosphorylation sites. There is a table in each tab, and upon entering a transcript identifier, all three tables are populated with data. The "Experimental" tab displays phosphorylation sites that were experimentally determined. The "Predicted" tab displays phosphorylation sites that were computationally predicted. Lastly, the "Hotspots" tab displays computationally predicted phosphorylation hotspots.
+##### This app displays tables containing data, obtained from PhosPhAt, regarding protein phosphorylation sites. There is a table in each tab, and upon entering a transcript identifier, all three tables are populated with data. The "Experimental Sites" tab displays phosphorylation sites that were experimentally determined. The "Predicted Sites" tab displays phosphorylation sites that were computationally predicted. The "Experimental Hotspots" tab displays experimentally determined phosphorylation hotspots. Lastly, the "Predicted Hotspots" tab displays computationally predicted phosphorylation hotspots.
 
 > The Arabidopsis Protein Phosphorylation Site Database (PhosPhAt 4.0) contains information on Arabidopsis phosphorylation sites which were identified by mass spectrometry in large scale experiments by different research groups. Specific information about the peptide properties, their annotated biological function as well as the experimental and analytical context is given. . . . The PhosPhAt service has a built-in plant specific phosphorylation site predictor trained on the experimental dataset for Serine, threonine and tyrosine phosphorylation.
 >

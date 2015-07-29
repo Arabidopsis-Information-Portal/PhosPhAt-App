@@ -1,51 +1,76 @@
 <div class="science-app" data-app-name="phosphorylation-app">
   <h2>Phosphorylation Data</h2>
 
-  <form id="phosphat_search">
-  Transcript ID: <input type="text" name="phosphat_transcript-input">
-  <button type="submit" id="phosphat_searchButton" class="btn btn-success">Search</button>
-  <button type="button" id="phosphat_clearButton" class="btn btn-danger">Clear</button>
+  <form id="transcriptSearch">
+  Transcript ID: <input type="text" name="transcriptInput">
+  <button type="submit" id="searchButton" class="btn btn-success">Search</button>
+  <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
   <h6><i>Example value: AT1G01540.1</i></h6>
   </form>
-  <div id="phosphat_error"></div>
-  <div id="phosphat_protein-seq-cont">
+  <div id="errorBox"></div>
+  <div id="proteinInfoBox">
 
   <h5>Protein Sequence:
-    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target="#phosphat_protein-seq" aria-expanded="false" aria-controls="phosphat_protein-seq">
+    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target="#proteinSequenceBox" aria-expanded="false" aria-controls="proteinSequenceBox">
       <span class="glyphicon glyphicon-collapse-down"></span>
     </button>
   </h5>
 
-  <div id="phosphat_protein-seq" class="collapse"></div></div>
+  <div id="proteinSequenceBox" class="collapse"></div></div>
   <br>
+
   <!-- Navigation tabs -->
   <ul class="nav nav-tabs" role="tablist">
-  <li role="presentation" id="phosphat_exp-tab" class="active">
-  <a href="#phosphat_about" aria-controls="about" role="tab" data-toggle="tab">About</a>
-  </li>
 
-  <li role="presentation" id="phosphat_exp-tab">
-  <a href="#phosphat_experimental" aria-controls="experimental" role="tab" data-toggle="tab">Experimental<span id="exp_num_rows"></span></a>
-  </li>
+    <!-- About tab -->
+    <li role="presentation" class="active">
+      <a href="#aboutTab" aria-controls="about" role="tab" data-toggle="tab">
+        About
+      </a>
+    </li>
 
-  <li role="presentation" id="phosphat_pred-tab">
-  <a href="#phosphat_predicted" aria-controls="predicted" role="tab" data-toggle="tab">Predicted<span id="pred_num_rows"></span></a>
-  </li>
+    <!-- Experimental tab -->
+    <li role="presentation">
+      <a href="#experimentalTab" aria-controls="experimental" role="tab" data-toggle="tab">
+        Experimental Sites
+        <span id="numExperimentalEntries"></span>
+      </a>
+    </li>
 
-  <li role="presentation" id="phosphat_hot-tab">
-  <a href="#phosphat_hotspots" aria-controls="hotspots" role="tab" data-toggle="tab">Hotspots<span id="hot_num_rows"></span></a>
-  </li>
+    <!-- Predicted tab -->
+    <li role="presentation">
+      <a href="#predictedTab" aria-controls="predicted" role="tab" data-toggle="tab">
+        Predicted Sites
+        <span id="numPredictedEntries"></span>
+      </a>
+    </li>
+
+    <!-- Experimental Hotspots tab -->
+    <li role="presentation">
+      <a href="#experimentalHotspotsTab" aria-controls="hotspots" role="tab" data-toggle="tab">
+        Experimental Hotspots
+        <span id="numExpHotspotsEntries"></span>
+      </a>
+    </li>
+
+    <!-- Predicted Hotspots tab -->
+    <li role="presentation">
+      <a href="#predictedHotspotsTab" aria-controls="hotspots" role="tab" data-toggle="tab">
+        Predicted Hotspots
+        <span id="numPredHotspotsEntries"></span>
+      </a>
+    </li>
   </ul>
 
-  <!-- Tab panes -->
+  <!-- Tab content -->
   <div class="tab-content">
 
     <!-- About tab -->
-    <div role="tabpanel" class="tab-pane fade in active" id="phosphat_about">
-      <a href="http://phosphat.uni-hohenheim.de" target="_blank"><img src="http://i57.tinypic.com/2dh6y4h.png" id="phos_logo" alt="PhosPhAt Logo"></a>
+    <div role="tabpanel" class="tab-pane fade in active" id="aboutTab">
+      <a href="http://phosphat.uni-hohenheim.de" target="_blank"><img src="http://i57.tinypic.com/2dh6y4h.png" id="logo" alt="PhosPhAt Logo"></a>
 
       <a href="http://phosphat.uni-hohenheim.de" target="_blank"><h3>PhosPhAt Website</h3></a>
-      <h4>This app displays tables containing data, obtained from PhosPhAt, regarding protein phosphorylation sites. There is a table in each tab, and upon entering a transcript identifier, all three tables are populated with data. The "Experimental" tab displays phosphorylation sites that were experimentally determined. The "Predicted" tab displays phosphorylation sites that were computationally predicted. Lastly, the "Hotspots" tab displays computationally predicted phosphorylation hotspots. </h4>
+      <h4>This app displays tables containing data, obtained from PhosPhAt, regarding protein phosphorylation sites. There is a table in each tab, and upon entering a transcript identifier, all three tables are populated with data. The "Experimental Sites" tab displays phosphorylation sites that were experimentally determined. The "Predicted Sites" tab displays phosphorylation sites that were computationally predicted. The "Experimental Hotspots" tab displays experimentally determined phosphorylation hotspots. Lastly, the "Predicted Hotspots" tab displays computationally predicted phosphorylation hotspots.</h4>
       <blockquote>
         <p>The Arabidopsis Protein Phosphorylation Site Database (PhosPhAt 4.0) contains information on Arabidopsis phosphorylation sites which were identified by mass spectrometry in large scale experiments by different research groups. Specific information about the peptide properties, their annotated biological function as well as the experimental and analytical context is given. . . . The PhosPhAt service has a built-in plant specific phosphorylation site predictor trained on the experimental dataset for Serine, threonine and tyrosine phosphorylation.</p>
         <footer>The Arabidopsis Protein Phosphorylation Site Database (PhosPhAt)</footer>
@@ -94,16 +119,19 @@
           <li>A transcript ID may return data for one, all, or none of the tabs. If a table has zero entries, it means no data was returned.</li>
         </ul>
 
-    </div> <!-- Close #phosphat_about -->
+    </div> <!-- Close #aboutTab -->
 
     <!-- Data tables -->
-    <div role="tabpanel" class="tab-pane fade" id="phosphat_experimental">
+    <div role="tabpanel" class="tab-pane fade" id="experimentalTab">
       <h2>Please search for a transcript ID.</h2>
     </div>
-    <div role="tabpanel" class="tab-pane fade" id="phosphat_predicted">
+    <div role="tabpanel" class="tab-pane fade" id="predictedTab">
       <h2>Please search for a transcript ID.</h2>
     </div>
-    <div role="tabpanel" class="tab-pane fade" id="phosphat_hotspots">
+    <div role="tabpanel" class="tab-pane fade" id="experimentalHotspotsTab">
+      <h2>Please search for a transcript ID.</h2>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="predictedHotspotsTab">
       <h2>Please search for a transcript ID.</h2>
     </div>
 

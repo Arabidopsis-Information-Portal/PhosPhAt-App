@@ -10,22 +10,23 @@
     // Will be used to store initialized DataTables
     var experimentalTable,
         predictedTable,
-        hotspotTable;
+        expHotspotTable,
+        predHotspotTable;
 
 
     // Once the search form is submitted, retrieve the data
-    $('#phosphat_search').submit(function(event) {
+    $('#transcriptSearch').submit(function(event) {
       // Reset UI elements.
-      $('#phosphat_protein-seq-cont', appContext).hide();
-      $('#phosphat_error', appContext).empty();
+      $('#proteinInfoBox', appContext).hide();
+      $('#errorBox', appContext).empty();
 
       // Insert loading text, will be replaced by table
-      $('#phosphat_experimental', appContext).html('<h2>Loading...</h2>');
-      $('#phosphat_predicted', appContext).html('<h2>Loading...</h2>');
-      $('#phosphat_hotspots', appContext).html('<h2>Loading...</h2>');
+      $('#experimentalTab', appContext).html('<h2>Loading...</h2>');
+      $('#predictedTab', appContext).html('<h2>Loading...</h2>');
+      $('#predictedHotspotsTab', appContext).html('<h2>Loading...</h2>');
 
       // Save user-input as a parameter
-      transcriptID = $('input[name=phosphat_transcript-input]').val();
+      transcriptID = $('input[name=transcriptInput]').val();
       var params = {
         transcript_id: transcriptID
       };
@@ -46,40 +47,48 @@
         showErrorMessage // Displays an error if Adama returns an exception
       );
 
-      // Call API to retrieve hotspot data, using saved parameter
+      // Call API to retrieve experimental hotspot data, using saved parameter
       Agave.api.adama.search(
-        {namespace: 'phosphat', service: 'phosphorylated_hotspots_v0.2',
+        {namespace: 'phosphat', service: 'experimental_hotspots_v0.1',
          queryParams: params},
-        showHotspotData, // Displays retrieved data in a table
+        showExpHotspotData, // Displays retrieved data in a table
+        showErrorMessage // Displays an error if Adama returns an exception.
+      );
+
+      // Call API to retrieve predicted hotspot data, using saved parameter
+      Agave.api.adama.search(
+        {namespace: 'phosphat', service: 'predicted_hotspots_v0.3',
+         queryParams: params},
+        showPredHotspotData, // Displays retrieved data in a table
         showErrorMessage // Displays an error if Adama returns an exception.
       );
 
       // Prevent page from reloading when form is submitted
       event.preventDefault();
-    }); // $('#phosphat_search').submit
+    }); // $('#transcriptSearch').submit
 
 
     // Clear the screen when the clear button is clicked.
-    $('#phosphat_clearButton').click(function() {
+    $('#clearButton').click(function() {
       // Clear input field
-      $('input[name=phosphat_transcript-input]').val('');
+      $('input[name=transcriptInput]').val('');
 
       // Remove protein sequence
-      $('#phosphat_protein-seq', appContext).empty();
-      $('#phosphat_protein-seq-cont', appContext).hide();
+      $('#proteinSequenceBox', appContext).empty();
+      $('#proteinInfoBox', appContext).hide();
 
       // Remove any errors present
-      $('#phosphat_error', appContext).empty();
+      $('#errorBox', appContext).empty();
 
       // Reset number of rows
-      $('#exp_num_rows', appContext).empty();
-      $('#pred_num_rows', appContext).empty();
-      $('#hot_num_rows', appContext).empty();
+      $('#numExperimentalEntries', appContext).empty();
+      $('#numPredictedEntries', appContext).empty();
+      $('#numPredHotspotsEntries', appContext).empty();
 
       // Remove tables
-      $('#phosphat_experimental').html('<h2>Please search for a transcript ID.</h2>');
-      $('#phosphat_predicted').html('<h2>Please search for a transcript ID.</h2>');
-      $('#phosphat_hotspots').html('<h2>Please search for a transcript ID.</h2>');
+      $('#experimentalTab').html('<h2>Please search for a transcript ID.</h2>');
+      $('#predictedTab').html('<h2>Please search for a transcript ID.</h2>');
+      $('#predictedHotspotsTab').html('<h2>Please search for a transcript ID.</h2>');
     });
 
 
@@ -98,19 +107,19 @@
           formatted_seq += raw_seq.substring(0, 70) + '<br />';
           raw_seq = raw_seq.substring(70);
         }
-        $('#phosphat_protein-seq', appContext).html('>' +
+        $('#proteinSequenceBox', appContext).html('>' +
           transcriptID  + '<br />');
-        $('#phosphat_protein-seq', appContext).append(formatted_seq);
-        $('#phosphat_protein-seq-cont', appContext).show();
+        $('#proteinSequenceBox', appContext).append(formatted_seq);
+        $('#proteinInfoBox', appContext).show();
       }
 
       // Create a base table that the data will be stored in
-      $('#phosphat_experimental', appContext).html(
-        '<table width="100%" cellspacing="0" id="phosphat_experimental-table"' +
+      $('#experimentalTab', appContext).html(
+        '<table width="100%" cellspacing="0" id="experimentalTable"' +
         'class="table table-striped table-bordered table-hover">' +
-        '<thead><tr><th>Peptide Sequence</th><th>Position</th>' +
+        '<thead><tr><th>Peptide Sequence</th><th>Position in Sequence</th>' +
         '<th>Modification Type</th><th>Mass</th></tr></thead>' +
-        '<tbody id="phosphat_experimental-data"></tbody></table>');
+        '<tbody id="experimentalData"></tbody></table>');
 
       // Temporarily save each JSON object in the data
       for (var i = 0; i < data.length; i++) {
@@ -127,12 +136,12 @@
         }
 
         // Dynamically add saved data to the table
-        $('#phosphat_experimental-data', appContext).append('<tr>' + peptideSeq +
+        $('#experimentalData', appContext).append('<tr>' + peptideSeq +
         peptidePos + modType  + peptideMass + '</tr>');
       }
 
       // Convert normal table to a DataTable
-      experimentalTable = $('#phosphat_experimental-table', appContext).DataTable({
+      experimentalTable = $('#experimentalTable', appContext).DataTable({
         oLanguage: { // Override default text to make it more specific to this app
           sSearch: 'Narrow results:',
           sEmptyTable: 'No experimental phosphorylation data available for this transcript id.'
@@ -142,7 +151,7 @@
       });
 
       // Add the number of rows to the tab name
-      $('#exp_num_rows', appContext).html(' (' + experimentalTable.data().length + ')');
+      $('#numExperimentalEntries', appContext).html(' (' + experimentalTable.data().length + ')');
 
     }; // showExperimentalData
 
@@ -154,12 +163,12 @@
       data = data.result; // data.result contains an array of objects
 
       // Create a base table that the data will be stored in
-      $('#phosphat_predicted', appContext).html(
-        '<table id="phosphat_predicted-table" width="100%" cellspacing="0"' +
+      $('#predictedTab', appContext).html(
+        '<table id="predictedTable" width="100%" cellspacing="0"' +
         'class="table table-striped table-bordered table-hover">' +
         '<thead><tr><th>Protein Position</th><th>13-mer Sequence</th>' +
         '<th>Prediction Score</th></tr></thead>' +
-        '<tbody id="phosphat_predicted-data"></tbody></table>');
+        '<tbody id="predictedData"></tbody></table>');
 
       // Temporarily save each JSON object in the data
       for (var i = 0; i < data.length; i++) {
@@ -169,12 +178,12 @@
         // Round prediction score
         var predictionScore = '<td>' + parseFloat(data[i].prediction_score).toFixed(4) + '</td>';
         // Dynamically add saved data to the table
-        $('#phosphat_predicted-data', appContext).append('<tr>' + proteinPos +
+        $('#predictedData', appContext).append('<tr>' + proteinPos +
         sequence + predictionScore + '</tr>');
       }
 
       // Convert normal table to DataTable
-        predictedTable = $('#phosphat_predicted-table', appContext).DataTable({
+        predictedTable = $('#predictedTable', appContext).DataTable({
         oLanguage: { // Override default text to make it more specific to this app
           sSearch: 'Narrow results:',
           sEmptyTable: 'No predicted phosphorylation data available for this transcript id.'
@@ -184,24 +193,25 @@
       });
 
       // Add the number of rows to the tab name
-      $('#pred_num_rows', appContext).html(' (' + predictedTable.data().length + ')');
+      $('#numPredictedEntries', appContext).html(' (' + predictedTable.data().length + ')');
 
     }; // showPredictedData
 
-    // Create a table to display hotspot data
-    var showHotspotData = function showHotspotData(response) {
+
+    // Create a table to display experimental hotspot data
+    var showExpHotspotData = function showExpHotspotData(response) {
 
       // Store API response
       var data = response.obj || response;
       data = data.result; // data.result contains an array of objects
 
       // Create a base table that the data will be stored in
-      $('#phosphat_hotspots', appContext).html(
-        '<table id="phosphat_hotspot-table" width="100%" cellspacing="0"' +
+      $('#experimentalHotspotsTab', appContext).html(
+        '<table id="expHotspotTable" width="100%" cellspacing="0"' +
         'class="table table-striped table-bordered table-hover">' +
         '<thead><tr><th>Start Position</th><th>End Position</th>' +
         '<th>Hotspot Sequence</th></tr></thead>' +
-        '<tbody id="phosphat_hotspot-data"></tbody></table>');
+        '<tbody id="experimentalHotspotData"></tbody></table>');
 
       // Temporarily save each JSON object in the data
       for (var i = 0; i < data.length; i++) {
@@ -211,12 +221,12 @@
         var sequence = '<td>' + data[i].hotspot_sequence + '</td>';
 
         // Dynamically add saved data to the table
-        $('#phosphat_hotspot-data', appContext).append('<tr>' + start +
+        $('#experimentalHotspotData', appContext).append('<tr>' + start +
         end + sequence + '</tr>');
       }
 
       // Convert normal table to DataTable
-      hotspotTable = $('#phosphat_hotspot-table', appContext).DataTable({
+      expHotspotTable = $('#expHotspotTable', appContext).DataTable({
         oLanguage: { // Override default text to make it more specific to this app
           sSearch: 'Narrow results:',
           sEmptyTable: 'No hotspot data available for this transcript id.'
@@ -226,13 +236,56 @@
       });
 
       // Add the number of rows to the tab name
-      $('#hot_num_rows', appContext).html(' (' + hotspotTable.data().length + ')');
+      $('#numExpHotspotsEntries', appContext).html(' (' + expHotspotTable.data().length + ')');
 
     }; // showHotspotData
 
+
+    // Create a table to display predicted hotspot data
+    var showPredHotspotData = function showPredHotspotData(response) {
+
+      // Store API response
+      var data = response.obj || response;
+      data = data.result; // data.result contains an array of objects
+
+      // Create a base table that the data will be stored in
+      $('#predictedHotspotsTab', appContext).html(
+        '<table id="predHotspotTable" width="100%" cellspacing="0"' +
+        'class="table table-striped table-bordered table-hover">' +
+        '<thead><tr><th>Start Position</th><th>End Position</th>' +
+        '<th>Hotspot Sequence</th></tr></thead>' +
+        '<tbody id="predictedHotspotData"></tbody></table>');
+
+      // Temporarily save each JSON object in the data
+      for (var i = 0; i < data.length; i++) {
+        // Saves data in strings to later be added to table
+        var start = '<td>' + data[i].start_position + '</td>';
+        var end = '<td>' + data[i].end_position + '</td>';
+        var sequence = '<td>' + data[i].hotspot_sequence + '</td>';
+
+        // Dynamically add saved data to the table
+        $('#predictedHotspotData', appContext).append('<tr>' + start +
+        end + sequence + '</tr>');
+      }
+
+      // Convert normal table to DataTable
+      predHotspotTable = $('#predHotspotTable', appContext).DataTable({
+        oLanguage: { // Override default text to make it more specific to this app
+          sSearch: 'Narrow results:',
+          sEmptyTable: 'No hotspot data available for this transcript id.'
+        },
+        dom: 'Rlfrtip', // Allow for user to reorder columns
+        stateSave: true // Save the state of the table between loads
+      });
+
+      // Add the number of rows to the tab name
+      $('#numPredHotspotsEntries', appContext).html(' (' + predHotspotTable.data().length + ')');
+
+    }; // showPredHotspotData
+
     // If the API returns an error, display the error message
     var showErrorMessage = function showErrorMessage(response) {
-      $('#phosphat_error', appContext).html(
+      $('#errorBox', appContext).html(
           '<h4>There was an error retrieving your data from the server. ' +
           'See below:</h4><div class="alert alert-danger" role="alert">' +
            response.obj.message + '</div>');
