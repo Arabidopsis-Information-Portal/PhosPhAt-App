@@ -21,7 +21,7 @@
         predHotspotTable;
 
     // Once the search form is submitted, retrieve the data
-    $('#transcriptSearch', appContext).submit(function(event) {
+    $('#searchForm', appContext).submit(function(event) {
       // Reset UI elements.
       $('#proteinInfoBox', appContext).hide();
       $('#errorBox', appContext).empty();
@@ -71,7 +71,7 @@
 
       // Prevent page from reloading when form is submitted
       event.preventDefault();
-    }); // $('#transcriptSearch').submit
+    }); // $('#searchForm').submit
 
 
     // Clear the screen when the clear button is clicked.
@@ -89,11 +89,13 @@
       // Reset number of rows
       $('#numExperimentalEntries', appContext).empty();
       $('#numPredictedEntries', appContext).empty();
+      $('#numExpHotspotsEntries', appContext).empty();
       $('#numPredHotspotsEntries', appContext).empty();
 
       // Remove tables
       $('#experimentalTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
       $('#predictedTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
+      $('#experimentalHotspotsTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
       $('#predictedHotspotsTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
     });
 
