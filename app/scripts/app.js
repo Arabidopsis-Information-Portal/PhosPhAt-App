@@ -8,8 +8,9 @@
   // Added to selectors to make sure the app doesn't interfere with other apps
   var appContext = $('[data-app-name="phosphorylation-app"]');
 
-  /* Ensure Agave is ready before running
-     All of the app code is in this event listener. */
+  /* Having all of the code in this event listener ensures that Agave is
+     ready before the rest of the code is executed. This is important
+     because Agave is what's used to call the web services. */
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
     var transcriptID;
