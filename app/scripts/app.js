@@ -1,8 +1,15 @@
+/* All code should be in the following self-executing function.
+    window represents the browser's window
+    $ refers to jQuery
+    undefined has no value set, making it truly undefined */
 (function(window, $, undefined) {
+  // Indicates that the code should be executed in strict mode, which is safer
   'use strict';
+  // Added to selectors to make sure the app doesn't interfere with other apps
   var appContext = $('[data-app-name="phosphorylation-app"]');
 
-  // Ensure Agave is ready before running
+  /* Ensure Agave is ready before running
+     All of the app code is in this event listener. */
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
     var transcriptID;
@@ -13,9 +20,8 @@
         expHotspotTable,
         predHotspotTable;
 
-
     // Once the search form is submitted, retrieve the data
-    $('#transcriptSearch').submit(function(event) {
+    $('#transcriptSearch', appContext).submit(function(event) {
       // Reset UI elements.
       $('#proteinInfoBox', appContext).hide();
       $('#errorBox', appContext).empty();
@@ -26,7 +32,7 @@
       $('#predictedHotspotsTab', appContext).html('<h2>Loading...</h2>');
 
       // Save user-input as a parameter
-      transcriptID = $('input[name=transcriptInput]').val();
+      transcriptID = $('input[name=transcriptInput]', appContext).val();
       var params = {
         transcript_id: transcriptID
       };
@@ -69,9 +75,9 @@
 
 
     // Clear the screen when the clear button is clicked.
-    $('#clearButton').click(function() {
+    $('#clearButton', appContext).click(function() {
       // Clear input field
-      $('input[name=transcriptInput]').val('');
+      $('input[name=transcriptInput]', appContext).val('');
 
       // Remove protein sequence
       $('#proteinSequenceBox', appContext).empty();
@@ -86,9 +92,9 @@
       $('#numPredHotspotsEntries', appContext).empty();
 
       // Remove tables
-      $('#experimentalTab').html('<h2>Please search for a transcript ID.</h2>');
-      $('#predictedTab').html('<h2>Please search for a transcript ID.</h2>');
-      $('#predictedHotspotsTab').html('<h2>Please search for a transcript ID.</h2>');
+      $('#experimentalTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
+      $('#predictedTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
+      $('#predictedHotspotsTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
     });
 
 
@@ -200,7 +206,6 @@
 
     // Create a table to display experimental hotspot data
     var showExpHotspotData = function showExpHotspotData(response) {
-
       // Store API response
       var data = response.obj || response;
       data = data.result; // data.result contains an array of objects
@@ -243,7 +248,6 @@
 
     // Create a table to display predicted hotspot data
     var showPredHotspotData = function showPredHotspotData(response) {
-
       // Store API response
       var data = response.obj || response;
       data = data.result; // data.result contains an array of objects
