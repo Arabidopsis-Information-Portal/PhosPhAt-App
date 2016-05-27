@@ -98,6 +98,9 @@
       $('#predictedTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
       $('#experimentalHotspotsTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
       $('#predictedHotspotsTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
+
+      // select the about tab
+      $('a[href="#aboutTab"]', appContext).tab('show');
     });
 
 
@@ -156,7 +159,8 @@
           sEmptyTable: 'No experimental phosphorylation data available for this transcript id.'
         },
         dom: 'Rlfrtip', // Allow for user to reorder columns
-        stateSave: true // Save the state of the table between loads
+        stateSave: true, // Save the state of the table between loads
+        colReorder: true
       });
 
       // Add the number of rows to the tab name
@@ -198,7 +202,8 @@
           sEmptyTable: 'No predicted phosphorylation data available for this transcript id.'
         },
         dom: 'Rlfrtip', // Allow for user to reorder columns
-        stateSave: true // Save the state of the table between loads
+        stateSave: true, // Save the state of the table between loads
+        colReorder: true
       });
 
       // Add the number of rows to the tab name
@@ -240,7 +245,8 @@
           sEmptyTable: 'No hotspot data available for this transcript id.'
         },
         dom: 'Rlfrtip', // Allow for user to reorder columns
-        stateSave: true // Save the state of the table between loads
+        stateSave: true, // Save the state of the table between loads
+        colReorder: true
       });
 
       // Add the number of rows to the tab name
@@ -282,7 +288,8 @@
           sEmptyTable: 'No hotspot data available for this transcript id.'
         },
         dom: 'Rlfrtip', // Allow for user to reorder columns
-        stateSave: true // Save the state of the table between loads
+        stateSave: true, // Save the state of the table between loads
+        colReorder: true
       });
 
       // Add the number of rows to the tab name
