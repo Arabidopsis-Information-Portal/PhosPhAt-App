@@ -2,7 +2,7 @@
   <h2>Phosphorylation Data</h2>
 
   <form id="searchForm">
-  Transcript ID: <input type="text" name="transcriptInput">
+  Transcript ID: <input type="text" id="transcriptInput" name="transcriptInput" value="AT1G01540.1" placeholder="e.g. AT1G01540.1">
   <button type="submit" id="searchButton" class="btn btn-success">Search</button>
   <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
   <h6><i>Example value: AT1G01540.1</i></h6>
@@ -33,7 +33,7 @@
     <li role="presentation">
       <a href="#experimentalTab" aria-controls="experimental" role="tab" data-toggle="tab">
         Experimental Sites
-        <span id="numExperimentalEntries"></span>
+        <span id="numExperimentalEntries" class="badge"></span>
       </a>
     </li>
 
@@ -41,7 +41,7 @@
     <li role="presentation">
       <a href="#predictedTab" aria-controls="predicted" role="tab" data-toggle="tab">
         Predicted Sites
-        <span id="numPredictedEntries"></span>
+        <span id="numPredictedEntries" class="badge"></span>
       </a>
     </li>
 
@@ -49,7 +49,7 @@
     <li role="presentation">
       <a href="#experimentalHotspotsTab" aria-controls="hotspots" role="tab" data-toggle="tab">
         Experimental Hotspots
-        <span id="numExpHotspotsEntries"></span>
+        <span id="numExpHotspotsEntries" class="badge"></span>
       </a>
     </li>
 
@@ -57,7 +57,7 @@
     <li role="presentation">
       <a href="#predictedHotspotsTab" aria-controls="hotspots" role="tab" data-toggle="tab">
         Predicted Hotspots
-        <span id="numPredHotspotsEntries"></span>
+        <span id="numPredHotspotsEntries" class="badge"></span>
       </a>
     </li>
   </ul>

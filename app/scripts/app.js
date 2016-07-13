@@ -7,12 +7,15 @@
   'use strict';
   // Added to selectors to make sure the app doesn't interfere with other apps
   var appContext = $('[data-app-name="phosphorylation-app"]');
+  var number_of_adama_calls = 4;
+  var default_tab_text = 'Please search for a transcript ID.';
 
   /* Having all of the code in this event listener ensures that Agave is
      ready before the rest of the code is executed. This is important
      because Agave is what's used to call the web services. */
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
+    var adama_calls = number_of_adama_calls;
     var transcriptID;
 
     // Will be used to store initialized DataTables
@@ -21,94 +24,40 @@
         expHotspotTable,
         predHotspotTable;
 
-    // Once the search form is submitted, retrieve the data
-    $('#searchForm', appContext).submit(function(event) {
-      // Reset UI elements.
-      $('#proteinInfoBox', appContext).hide();
-      $('#errorBox', appContext).empty();
+    var disableForm = function disableForm() {
+      var search_button = $('#searchButton', appContext);
+        search_button.html('<i class="fa fa-refresh fa-spin"></i> Searching...');
+        search_button.prop('disabled', true);
+        $('#transcriptInput', appContext).prop('disabled', true);
+        $('#clearButton', appContext).prop('disabled', true);
+    };
 
-      // Insert loading text, will be replaced by table
-      $('#experimentalTab', appContext).html('<h2>Loading...</h2>');
-      $('#predictedTab', appContext).html('<h2>Loading...</h2>');
-      $('#predictedHotspotsTab', appContext).html('<h2>Loading...</h2>');
+    var enableForm = function enableForm() {
+      var search_button = $('#searchButton', appContext);
+        search_button.html('Search');
+        search_button.prop('disabled', false);
+        $('#transcriptInput', appContext).prop('disabled', false);
+        $('#clearButton', appContext).prop('disabled', false);
+    };
 
-      // Save user-input as a parameter
-      transcriptID = $('input[name=transcriptInput]', appContext).val();
-      var params = {
-        transcript_id: transcriptID
-      };
-
-      // Call API to retrieve experimental data, using saved parameter
-      Agave.api.adama.search(
-        {namespace: 'phosphat', service: 'phosphorylated_experimental_v0.2',
-         queryParams: params},
-        showExperimentalData, // Displays retrieved data in a table
-        showErrorMessage // Displays an error if Adama returns an exception
-      );
-
-      // Call API to retrieve predicted data, using saved parameter
-      Agave.api.adama.search(
-        {namespace: 'phosphat', service: 'phosphorylated_predicted_v0.2',
-         queryParams: params},
-        showPredictedData, // Displays retrieved data in a table
-        showErrorMessage // Displays an error if Adama returns an exception
-      );
-
-      // Call API to retrieve experimental hotspot data, using saved parameter
-      Agave.api.adama.search(
-        {namespace: 'phosphat', service: 'experimental_hotspots_v0.1',
-         queryParams: params},
-        showExpHotspotData, // Displays retrieved data in a table
-        showErrorMessage // Displays an error if Adama returns an exception.
-      );
-
-      // Call API to retrieve predicted hotspot data, using saved parameter
-      Agave.api.adama.search(
-        {namespace: 'phosphat', service: 'predicted_hotspots_v0.3',
-         queryParams: params},
-        showPredHotspotData, // Displays retrieved data in a table
-        showErrorMessage // Displays an error if Adama returns an exception.
-      );
-
-      // Prevent page from reloading when form is submitted
-      event.preventDefault();
-    }); // $('#searchForm').submit
-
-
-    // Clear the screen when the clear button is clicked.
-    $('#clearButton', appContext).click(function() {
-      // Clear input field
-      $('input[name=transcriptInput]', appContext).val('');
-
-      // Remove protein sequence
-      $('#proteinSequenceBox', appContext).empty();
-      $('#proteinInfoBox', appContext).hide();
-
-      // Remove any errors present
-      $('#errorBox', appContext).empty();
-
-      // Reset number of rows
-      $('#numExperimentalEntries', appContext).empty();
-      $('#numPredictedEntries', appContext).empty();
-      $('#numExpHotspotsEntries', appContext).empty();
-      $('#numPredHotspotsEntries', appContext).empty();
-
-      // Remove tables
-      $('#experimentalTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
-      $('#predictedTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
-      $('#experimentalHotspotsTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
-      $('#predictedHotspotsTab', appContext).html('<h2>Please search for a transcript ID.</h2>');
-
-      // select the about tab
-      $('a[href="#aboutTab"]', appContext).tab('show');
-    });
-
+    // re-enables form after all Adama calls have returned
+    var checkAllCalls = function checkAllCalls() {
+      --adama_calls;
+      console.log('Adama calls remaining: ' + adama_calls);
+      if (adama_calls === 0) {
+        console.log('Re-enabling form... all calls returned.');
+        enableForm();
+        adama_calls = number_of_adama_calls;
+      }
+    };
 
     // Create a table to display experimental data
     var showExperimentalData = function showExperimentalData(response) {
       // Store API response
       var data = response.obj || response;
       data = data.result; // data.result contains an array of objects
+
+      $('a[href="#experimentalTab"]', appContext).tab('show');
 
       // Display protein sequence in FASTA
       if (data.length > 0) {
@@ -164,8 +113,8 @@
       });
 
       // Add the number of rows to the tab name
-      $('#numExperimentalEntries', appContext).html(' (' + experimentalTable.data().length + ')');
-
+      $('#numExperimentalEntries', appContext).html(' ' + experimentalTable.data().length);
+      checkAllCalls();
     }; // showExperimentalData
 
 
@@ -207,8 +156,8 @@
       });
 
       // Add the number of rows to the tab name
-      $('#numPredictedEntries', appContext).html(' (' + predictedTable.data().length + ')');
-
+      $('#numPredictedEntries', appContext).html(' ' + predictedTable.data().length);
+      checkAllCalls();
     }; // showPredictedData
 
 
@@ -250,8 +199,8 @@
       });
 
       // Add the number of rows to the tab name
-      $('#numExpHotspotsEntries', appContext).html(' (' + expHotspotTable.data().length + ')');
-
+      $('#numExpHotspotsEntries', appContext).html(' ' + expHotspotTable.data().length);
+      checkAllCalls();
     }; // showHotspotData
 
 
@@ -293,8 +242,8 @@
       });
 
       // Add the number of rows to the tab name
-      $('#numPredHotspotsEntries', appContext).html(' (' + predHotspotTable.data().length + ')');
-
+      $('#numPredHotspotsEntries', appContext).html(' ' + predHotspotTable.data().length);
+      checkAllCalls();
     }; // showPredHotspotData
 
     // If the API returns an error, display the error message
@@ -304,6 +253,98 @@
           'See below:</h4><div class="alert alert-danger" role="alert">' +
            response.obj.message + '</div>');
     };
+
+    // Once the search form is submitted, retrieve the data
+    $('#searchForm', appContext).submit(function(event) {
+      event.preventDefault();
+
+      // Reset UI elements.
+      $('#proteinInfoBox', appContext).hide();
+      $('#errorBox', appContext).empty();
+
+      // disable form
+      disableForm();
+
+      // Insert loading text, will be replaced by table
+      $('#experimentalTab', appContext).html('<h2>Loading...</h2>');
+      $('#predictedTab', appContext).html('<h2>Loading...</h2>');
+      $('#experimentalHotspotsTab', appContext).html('<h2>Loading...</h2>');
+      $('#predictedHotspotsTab', appContext).html('<h2>Loading...</h2>');
+
+      // start progress bar and tab spinners
+      $('#numExperimentalEntries', appContext).html('<i class="fa fa-refresh fa-spin"></i>');
+      $('#numPredictedEntries', appContext).html('<i class="fa fa-refresh fa-spin"></i>');
+      $('#numExpHotspotsEntries', appContext).html('<i class="fa fa-refresh fa-spin"></i>');
+      $('#numPredHotspotsEntries', appContext).html('<i class="fa fa-refresh fa-spin"></i>');
+
+      // Save user-input as a parameter
+      transcriptID = $('#transcriptInput', appContext).val();
+      var params = {
+        transcript_id: transcriptID
+      };
+
+      // Call API to retrieve experimental data, using saved parameter
+      Agave.api.adama.search(
+        {namespace: 'phosphat', service: 'phosphorylated_experimental_v0.2',
+         queryParams: params},
+        showExperimentalData, // Displays retrieved data in a table
+        showErrorMessage // Displays an error if Adama returns an exception
+      );
+
+      // Call API to retrieve predicted data, using saved parameter
+      Agave.api.adama.search(
+        {namespace: 'phosphat', service: 'phosphorylated_predicted_v0.2',
+         queryParams: params},
+        showPredictedData, // Displays retrieved data in a table
+        showErrorMessage // Displays an error if Adama returns an exception
+      );
+
+      // Call API to retrieve experimental hotspot data, using saved parameter
+      Agave.api.adama.search(
+        {namespace: 'phosphat', service: 'experimental_hotspots_v0.1',
+         queryParams: params},
+        showExpHotspotData, // Displays retrieved data in a table
+        showErrorMessage // Displays an error if Adama returns an exception.
+      );
+
+      // Call API to retrieve predicted hotspot data, using saved parameter
+      Agave.api.adama.search(
+        {namespace: 'phosphat', service: 'predicted_hotspots_v0.3',
+         queryParams: params},
+        showPredHotspotData, // Displays retrieved data in a table
+        showErrorMessage // Displays an error if Adama returns an exception.
+      );
+
+    }); // $('#searchForm').submit
+
+
+    // Clear the screen when the clear button is clicked.
+    $('#clearButton', appContext).click(function() {
+      // Clear input field
+      $('#transcriptInput', appContext).val('');
+
+      // Remove protein sequence
+      $('#proteinSequenceBox', appContext).empty();
+      $('#proteinInfoBox', appContext).hide();
+
+      // Remove any errors present
+      $('#errorBox', appContext).empty();
+
+      // Reset number of rows
+      $('#numExperimentalEntries', appContext).empty();
+      $('#numPredictedEntries', appContext).empty();
+      $('#numExpHotspotsEntries', appContext).empty();
+      $('#numPredHotspotsEntries', appContext).empty();
+
+      // Remove tables
+      $('#experimentalTab', appContext).html('<h2>' + default_tab_text + '</h2>');
+      $('#predictedTab', appContext).html('<h2>' + default_tab_text + '</h2>');
+      $('#experimentalHotspotsTab', appContext).html('<h2>' + default_tab_text + '</h2>');
+      $('#predictedHotspotsTab', appContext).html('<h2>' + default_tab_text + '</h2>');
+
+      // select the about tab
+      $('a[href="#aboutTab"]', appContext).tab('show');
+    });
 
   });
 })(window, jQuery);
